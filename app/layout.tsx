@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { JotaiProvider } from '../src/utils/providers'
+import Navigation from '../src/components/Navigation'
 import '../src/App.css'
 
 export const metadata: Metadata = {
@@ -16,7 +17,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <JotaiProvider>
-          {children}
+          <div className="App">
+            <Navigation />
+            {children}
+          </div>
         </JotaiProvider>
       </body>
     </html>
