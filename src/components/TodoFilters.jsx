@@ -1,50 +1,26 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { useFeatureFlag } from '../utils/featureFlags';
+import LegacyTodoFilters from './LegacyTodoFilters';
+import ModernTodoFilters from './TodoFilters.tsx';
 
-class TodoFilters extends Component {
-  render() {
-    const { filter, onFilterChange, todoCount } = this.props;
-    const safeCount = todoCount || { active: 0, total: 0, completed: 0 };
-
-    return (
-      <div className="todo-filters">
-        <div className="todo-count">
-          <span>{safeCount.active} of {safeCount.total} remaining</span>
-        </div>
-        
-        <div className="filter-buttons">
-          <button
-            className={`btn ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => onFilterChange && onFilterChange('all')}
-          >
-            All
-          </button>
-          <button
-            className={`btn ${filter === 'active' ? 'active' : ''}`}
-            onClick={() => onFilterChange && onFilterChange('active')}
-          >
-            Active
-          </button>
-          <button
-            className={`btn ${filter === 'completed' ? 'active' : ''}`}
-            onClick={() => onFilterChange && onFilterChange('completed')}
-          >
-            Completed
-          </button>
-        </div>
-      </div>
-    );
+/**
+ * TodoFilters Component Switcher
+ * 
+ * This component uses feature flags to switch between legacy (class-based) 
+ * and modern (functional) implementations of TodoFilters.
+ * 
+ * Both implementations have identical APIs and behavior, allowing for
+ * safe A/B testing and gradual rollout of modern components.
+ */
+const TodoFilters = (props) => {
+  const useModernTodoFilters = useFeatureFlag('USE_MODERN_TODO_FILTERS');
+  
+  // Feature flag determines which implementation to render
+  if (useModernTodoFilters) {
+    return <ModernTodoFilters {...props} />;
   }
-}
-
-TodoFilters.propTypes = {
-  filter: PropTypes.oneOf(['all', 'active', 'completed']).isRequired,
-  onFilterChange: PropTypes.func.isRequired,
-  todoCount: PropTypes.shape({
-    total: PropTypes.number.isRequired,
-    active: PropTypes.number.isRequired,
-    completed: PropTypes.number.isRequired
-  }).isRequired
+  
+  return <LegacyTodoFilters {...props} />;
 };
 
 export default TodoFilters;

@@ -1,133 +1,26 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { useFeatureFlag } from '../utils/featureFlags';
+import LegacyTodoItem from './LegacyTodoItem';
+import ModernTodoItem from './TodoItem.tsx';
 
-class TodoItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isEditing: false,
-      editText: props.todo.text
-    };
-    this.isCancelling = false;
+/**
+ * TodoItem Component Switcher
+ * 
+ * This component uses feature flags to switch between legacy (class-based) 
+ * and modern (hooks-based) implementations of TodoItem.
+ * 
+ * Both implementations have identical APIs and behavior, allowing for
+ * safe A/B testing and gradual rollout of modern components.
+ */
+const TodoItem = (props) => {
+  const useModernTodoItem = useFeatureFlag('USE_MODERN_TODO_ITEM');
+  
+  // Feature flag determines which implementation to render
+  if (useModernTodoItem) {
+    return <ModernTodoItem {...props} />;
   }
-
-  handleEdit = () => {
-    this.setState({ isEditing: true, editText: this.props.todo.text });
-  }
-
-  handleSave = () => {
-    if (this.isCancelling) {
-      return;
-    }
-    if (this.state.editText.trim()) {
-      this.props.onUpdate(this.props.todo.id, { text: this.state.editText.trim() });
-      this.setState({ isEditing: false });
-    }
-  }
-
-  handleCancel = () => {
-    this.isCancelling = true;
-    this.setState({ isEditing: false, editText: this.props.todo.text }, () => {
-      // Reset cancelling flag after state update
-      setTimeout(() => {
-        this.isCancelling = false;
-      }, 10);
-    });
-  }
-
-  handleBlur = () => {
-    // Only save on blur if we're not cancelling
-    if (!this.isCancelling) {
-      this.handleSave();
-    }
-  }
-
-  handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.handleSave();
-    } else if (e.key === 'Escape') {
-      this.handleCancel();
-    }
-  }
-
-  handleTextChange = (e) => {
-    this.setState({ editText: e.target.value });
-  }
-
-  render() {
-    const { todo, onToggle, onDelete } = this.props;
-    const { isEditing, editText } = this.state;
-
-    return (
-      <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-        <div className="todo-content">
-          <input
-            type="checkbox"
-            checked={todo.completed}
-            onChange={() => onToggle(todo.id)}
-            className="todo-checkbox"
-          />
-          
-          {isEditing ? (
-            <input
-              type="text"
-              value={editText}
-              onChange={this.handleTextChange}
-              onKeyDown={this.handleKeyPress}
-              onBlur={this.handleBlur}
-              className="todo-edit-input"
-              autoFocus
-            />
-          ) : (
-            <span
-              className={`todo-text ${todo.completed ? 'completed' : ''}`}
-              onDoubleClick={this.handleEdit}
-            >
-              {todo.text}
-            </span>
-          )}
-        </div>
-
-        <div className="todo-actions">
-          {!isEditing && (
-            <>
-              <button onClick={this.handleEdit} className="btn btn-edit">
-                Edit
-              </button>
-              <button onClick={() => onDelete(todo.id)} className="btn btn-delete">
-                Delete
-              </button>
-            </>
-          )}
-          {isEditing && (
-            <>
-              <button onClick={this.handleSave} className="btn btn-save">
-                Save
-              </button>
-              <button 
-                onMouseDown={() => { this.isCancelling = true; }}
-                onClick={this.handleCancel} 
-                className="btn btn-cancel"
-              >
-                Cancel
-              </button>
-            </>
-          )}
-        </div>
-      </li>
-    );
-  }
-}
-
-TodoItem.propTypes = {
-  todo: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
-  }).isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  
+  return <LegacyTodoItem {...props} />;
 };
 
 export default TodoItem;

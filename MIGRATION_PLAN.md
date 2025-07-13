@@ -507,101 +507,119 @@ const TodoApp = () => {
 - ✅ Vitest + RTL + Playwright test suite running in CI/CD
 - ✅ Test documentation and conventions
 
-### Phase 1: Next.js Foundation (Week 2)
-**Objective**: Create modern Next.js application structure
+### Phase 1: In-Place Modern Foundation (Week 2) 🎯 **REVISED APPROACH**
+**Objective**: Add modern technologies to existing CRA project with zero breaking changes
 
-#### Week 2 - Day 1-2: Project Setup
-- **Initialize Next.js 14**: TypeScript, ESLint, Prettier
-- **Configure build tools**: Tailwind CSS, PostCSS
-- **Setup development environment**: Hot reload, error boundaries
-- **Establish project structure**: /app, /components, /lib, /types
-- **Configure testing**: Vitest, RTL, Playwright for Next.js
+#### Week 2 - Day 1-2: TypeScript Integration
+- **Add TypeScript to existing CRA**: Install TypeScript alongside JavaScript
+- **Configure gradual adoption**: Allow `.js` and `.tsx` files to coexist
+- **Create type definitions**: Define Todo interfaces and component props
+- **Setup path aliases**: Clean import statements with baseUrl configuration
+- **Verify existing functionality**: Ensure all current features still work
 
-#### Week 2 - Day 3-4: TypeScript Foundation
-- **Define core types**: Todo interface, API types, component props
-- **Create utility functions**: API helpers, date formatting
-- **Setup strict TypeScript**: Enable all strict mode options
-- **Configure path aliases**: Clean import statements
+#### Week 2 - Day 3-4: Feature Flag System
+- **Create feature flag infrastructure**: Component-level switching mechanism
+- **Setup environment overrides**: Development-time flag control
+- **Create migration utilities**: Helpers for gradual component adoption
+- **Document flag strategy**: Clear guidelines for safe rollouts
 
-#### Week 2 - Day 5-7: Modern State Management
-- **Install Jotai**: Atomic state management (replaces Redux)
-- **Install TanStack Query**: Server state management (replaces Redux Saga)
-- **Setup Jotai Provider**: Configure atomic state management
-- **Create base atoms**: Mirror existing Redux state structure
-- **Setup atomWithQuery**: Integrate Jotai with TanStack Query
+#### Week 2 - Day 5-7: Modern State Management (Coexistence)
+- **Install Jotai alongside Redux**: Atomic state management without conflicts
+- **Install TanStack Query alongside Saga**: Server state management coexistence
+- **Setup dual providers**: Both Redux and Jotai providers in same app
+- **Create modern state variants**: Atomic versions of Redux state
+- **Maintain 100% backward compatibility**: Legacy state continues to work
 
 **Deliverables**:
-- ✅ Next.js 14 app with TypeScript
-- ✅ Jotai + TanStack Query configured (modern atomic state)
-- ✅ Development environment ready
-- ✅ Vitest + RTL + Playwright configured for Next.js
-- ✅ Initial architecture documentation
-- ✅ Jotai DevTools setup for debugging
+- ✅ TypeScript added to existing CRA project (gradual adoption)
+- ✅ Feature flag system for component-level migration control
+- ✅ Jotai + TanStack Query coexisting with Redux + Saga
+- ✅ All existing functionality preserved and tested
+- ✅ Migration infrastructure ready for component-by-component updates
+- ✅ Zero risk deployment - can enable/disable features instantly
 
-### Phase 2: Component Migration (Week 3-4)
-**Objective**: Migrate React components to modern patterns
+**Key Advantages of Revised Approach**:
+- 🛡️ **Zero Breaking Changes**: Existing app continues working unchanged
+- 🔄 **True Gradual Migration**: Component-by-component with instant rollback
+- 📦 **Single Codebase**: No context switching or duplication
+- 🚀 **Immediate Value**: Can start using modern patterns right away
+- 👥 **Team Friendly**: No learning curve disruption, gradual adoption
 
-#### Week 3 - Day 1-3: Core Components
-**TodoItem Component Migration**:
-- Convert class → functional component
-- Replace `this.state` → `useState`
-- Convert lifecycle methods → `useEffect`
+### Phase 2: In-Place Component Migration (Week 3-4) 🎯 **REVISED APPROACH**
+**Objective**: Create modern component variants alongside legacy ones with feature flag control
+
+#### Week 3 - Day 1-3: Modern Component Variants
+**Create Modern TodoItem Component**:
+- Build `TodoItem.tsx` functional component alongside existing class component
+- Use feature flag `USE_MODERN_TODO_ITEM` to control which renders
+- Add TypeScript interfaces and modern React patterns
+- Maintain identical API to legacy component
+- Comprehensive testing for both legacy and modern versions
+
+**Create Modern TodoForm Component**:
+- Build `TodoForm.tsx` with hooks alongside existing class component
+- Feature flag `USE_MODERN_TODO_FORM` controls implementation
+- Add form validation with TypeScript
+- Implement optimistic updates and error handling
+- Ensure identical behavior to legacy version
+
+#### Week 3 - Day 4-5: Hybrid Component System
+**Create Component Switcher Pattern**:
+```jsx
+const TodoItem = (props) => {
+  const useModern = useFeatureFlag('USE_MODERN_TODO_ITEM');
+  return useModern ? <ModernTodoItem {...props} /> : <LegacyTodoItem {...props} />;
+};
+```
+
+**TodoList and TodoFilters Migration**:
+- Create modern functional variants alongside legacy
+- Feature flags control which implementation renders
+- Maintain exact same API and behavior
 - Add TypeScript interfaces
-- Maintain 100% test coverage
 
-**TodoForm Component Migration**:
-- Convert to functional component with hooks
-- Add form validation with proper TypeScript
-- Implement optimistic updates
-- Add error handling and loading states
+#### Week 3 - Day 6-7: Testing Both Implementations
+- **Dual test coverage**: Test both legacy and modern components
+- **Feature flag testing**: Verify switching works correctly
+- **Performance comparison**: Benchmark legacy vs modern
+- **Cross-browser validation**: Ensure both work across browsers
 
-#### Week 3 - Day 4-5: List Components
-**TodoList Component Migration**:
-- Convert to functional component
-- Implement virtualization for large lists
-- Add proper key optimization
-- Maintain filtering functionality
+#### Week 4 - Day 1-3: State Management Coexistence
+**Jotai Integration (No Redux Removal)**:
+- Create Jotai atoms that mirror Redux state
+- Setup `atomWithQuery` for server state alongside Redux Saga
+- Dual provider setup: Both Redux and Jotai active
+- Components choose state management via feature flags
+- Zero breaking changes to existing Redux usage
 
-**TodoFilters Component Migration**:
-- Convert to functional component
-- Add URL state synchronization
-- Implement proper accessibility
+#### Week 4 - Day 4-5: Gradual Component Enablement
+- **Feature flag rollout**: Start with 0% → 10% → 50% → 100%
+- **A/B testing infrastructure**: Compare legacy vs modern performance
+- **Real-time monitoring**: Track errors and performance
+- **Instant rollback capability**: Disable flags if issues arise
 
-#### Week 3 - Day 6-7: Testing & Validation
-- **Migrate all tests**: Update for hooks patterns (Vitest + RTL)
-- **Add new test scenarios**: TypeScript edge cases
-- **Performance testing**: Compare bundle sizes
-- **Cross-browser validation**: Playwright E2E tests
-
-#### Week 4 - Day 1-3: Container Migration
-**TodoApp Container → Page Component**:
-- Convert to Next.js page component
-- Implement Server Components where applicable
-- Add proper error boundaries
-- Migrate navigation logic
-
-#### Week 4 - Day 4-5: State Management Migration
-- **Install Jotai alongside Redux**: No conflicts, dual providers
-- **Create Jotai atoms**: Mirror existing Redux slices
-- **Setup atomWithQuery**: Integrate server state with Jotai
-- **Feature flag integration**: Toggle between Redux and Jotai
-- **Gradual component migration**: One component at a time
-- **Performance comparison**: Benchmark atomic vs global state
-
-#### Week 4 - Day 6-7: Integration Testing
-- **Full feature testing**: All CRUD operations (Vitest + RTL)
-- **Performance benchmarking**: Compare with legacy
-- **User acceptance testing**: Validate all workflows (Playwright)
-- **Documentation updates**: Migration progress
+#### Week 4 - Day 6-7: Integration Validation
+- **End-to-end testing**: All user workflows work with both implementations
+- **Performance benchmarking**: Document improvements
+- **User acceptance testing**: Validate identical behavior
+- **Team training**: Modern patterns and feature flag usage
 
 **Deliverables**:
-- ✅ All components migrated to modern patterns
-- ✅ Legacy Redux and modern Jotai coexisting safely
-- ✅ 100% test coverage maintained
-- ✅ Performance improvements documented
-- ✅ Feature parity validated
-- ✅ Instant rollback capability confirmed
-- ✅ Team trained on Jotai patterns
+- ✅ Modern component variants coexisting with legacy
+- ✅ Feature flag system controlling migration pace
+- ✅ Jotai + TanStack Query working alongside Redux + Saga
+- ✅ 100% backward compatibility maintained
+- ✅ Comprehensive testing of both implementations
+- ✅ Performance improvements measured and documented
+- ✅ Zero-risk deployment with instant rollback
+- ✅ Team trained on modern patterns and gradual adoption
+
+**Key Safety Features**:
+- 🛡️ **Legacy Preservation**: Original components remain unchanged
+- 🎚️ **Granular Control**: Per-component feature flags
+- 📊 **A/B Testing**: Real-world performance comparison
+- ⚡ **Instant Rollback**: Can disable modern components immediately
+- 🔍 **Comprehensive Monitoring**: Track errors and performance metrics
 
 ### Phase 3: Advanced Features (Week 5-6)
 **Objective**: Add modern capabilities and optimizations

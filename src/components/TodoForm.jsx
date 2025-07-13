@@ -1,52 +1,26 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { useFeatureFlag } from '../utils/featureFlags';
+import LegacyTodoForm from './LegacyTodoForm';
+import ModernTodoForm from './TodoForm.tsx';
 
-class TodoForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: ''
-    };
+/**
+ * TodoForm Component Switcher
+ * 
+ * This component uses feature flags to switch between legacy (class-based) 
+ * and modern (hooks-based) implementations of TodoForm.
+ * 
+ * Both implementations have identical APIs and behavior, allowing for
+ * safe A/B testing and gradual rollout of modern components.
+ */
+const TodoForm = (props) => {
+  const useModernTodoForm = useFeatureFlag('USE_MODERN_TODO_FORM');
+  
+  // Feature flag determines which implementation to render
+  if (useModernTodoForm) {
+    return <ModernTodoForm {...props} />;
   }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    if (this.state.text.trim()) {
-      try {
-        this.props.onAdd({ text: this.state.text.trim() });
-      } catch (error) {
-        // Handle onAdd errors gracefully
-        console.error('Failed to add todo:', error);
-      }
-    }
-    // Always clear the input after form submission
-    this.setState({ text: '' });
-  }
-
-  handleChange = (e) => {
-    this.setState({ text: e.target.value });
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit} className="todo-form">
-        <input
-          type="text"
-          value={this.state.text}
-          onChange={this.handleChange}
-          placeholder="What needs to be done?"
-          className="todo-input"
-        />
-        <button type="submit" className="btn btn-add" tabIndex="0">
-          Add Todo
-        </button>
-      </form>
-    );
-  }
-}
-
-TodoForm.propTypes = {
-  onAdd: PropTypes.func.isRequired
+  
+  return <LegacyTodoForm {...props} />;
 };
 
 export default TodoForm;

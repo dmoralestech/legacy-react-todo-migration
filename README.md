@@ -28,13 +28,13 @@ This repository showcases a **production-ready migration strategy** from legacy 
 - **Create React App** build tooling
 - **Jest + Enzyme** for testing (migrated to Vitest + RTL)
 
-### Target (Modern) Stack
-- **Next.js 14** with App Router and Server Components
-- **Jotai + TanStack Query** for atomic state management
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
-- **Vitest + React Testing Library + Playwright** for testing
-- **Vercel** for deployment
+### Target (Modern) Stack - In-Place Migration
+- **TypeScript** added to existing CRA project for type safety
+- **Jotai + TanStack Query** for atomic state management (alongside Redux)
+- **Modern React Patterns** (functional components, hooks) with feature flags
+- **Enhanced Testing** with Vitest + React Testing Library + Playwright
+- **Gradual Component Migration** with instant rollback capability
+- **Feature Flag System** for zero-risk deployment
 
 ## 🚦 Current Status: Phase 0 Complete ✅
 
@@ -147,21 +147,23 @@ npm run test:e2e:chromium     # Chromium browser only
 - Modern state management (Jotai + TanStack Query)
 - Feature flag system implementation
 
-### 📋 Upcoming Phases
-- **Phase 2**: Component migration (class → functional)
-- **Phase 3**: State management migration (Redux → Jotai)
-- **Phase 4**: Routing migration (React Router → Next.js)
-- **Phase 5**: Performance optimization
-- **Phase 6**: Production deployment
-- **Phase 7**: Legacy cleanup
+### 📋 Upcoming Phases - Revised In-Place Migration
+- **Phase 2**: In-place component migration (modern variants with feature flags)
+- **Phase 3**: State management coexistence (Jotai alongside Redux)
+- **Phase 4**: Modern patterns adoption (TypeScript, hooks, atomic state)
+- **Phase 5**: Performance optimization and monitoring
+- **Phase 6**: Gradual rollout with A/B testing
+- **Phase 7**: Legacy cleanup (only after proven success)
 
 ## 🎯 Key Features Demonstrated
 
-### Enterprise Migration Patterns
-- **Strangler Fig Pattern**: Gradual replacement without downtime
-- **Feature Flags**: Safe rollouts with instant rollback capability
-- **Parallel Development**: New and old systems coexist
-- **Comprehensive Testing**: Prevent regressions during migration
+### Enterprise Migration Patterns - In-Place Approach
+- **Component Coexistence**: Modern variants alongside legacy components
+- **Feature Flags**: Granular per-component migration control
+- **Zero Downtime**: Same application, gradual feature adoption
+- **Instant Rollback**: Disable modern components immediately if needed
+- **A/B Testing**: Real-world performance comparison
+- **Comprehensive Testing**: Both legacy and modern implementations tested
 
 ### Modern Development Practices
 - **Atomic State Management**: Fine-grained reactivity with Jotai

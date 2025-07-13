@@ -1,47 +1,26 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import TodoItem from './TodoItem';
+import React from 'react';
+import { useFeatureFlag } from '../utils/featureFlags';
+import LegacyTodoList from './LegacyTodoList';
+import ModernTodoList from './TodoList.tsx';
 
-class TodoList extends Component {
-  render() {
-    const { todos, onToggle, onUpdate, onDelete } = this.props;
-    const safeTodos = todos || [];
-
-    if (safeTodos.length === 0) {
-      return (
-        <div className="todo-list-empty">
-          <p>No todos yet. Add one above!</p>
-        </div>
-      );
-    }
-
-    return (
-      <ul className="todo-list">
-        {safeTodos.map(todo => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onToggle={onToggle}
-            onUpdate={onUpdate}
-            onDelete={onDelete}
-          />
-        ))}
-      </ul>
-    );
+/**
+ * TodoList Component Switcher
+ * 
+ * This component uses feature flags to switch between legacy (class-based) 
+ * and modern (functional) implementations of TodoList.
+ * 
+ * Both implementations have identical APIs and behavior, allowing for
+ * safe A/B testing and gradual rollout of modern components.
+ */
+const TodoList = (props) => {
+  const useModernTodoList = useFeatureFlag('USE_MODERN_TODO_LIST');
+  
+  // Feature flag determines which implementation to render
+  if (useModernTodoList) {
+    return <ModernTodoList {...props} />;
   }
-}
-
-TodoList.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-      completed: PropTypes.bool.isRequired
-    })
-  ).isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  
+  return <LegacyTodoList {...props} />;
 };
 
 export default TodoList;
