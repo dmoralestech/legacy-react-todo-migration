@@ -108,6 +108,12 @@ export const toggleTodoActionAtom = atom(
   }
 );
 
+// Aliases for easier imports in components
+export const addTodoAtom = addTodoActionAtom;
+export const updateTodoAtom = updateTodoActionAtom;
+export const deleteTodoAtom = deleteTodoActionAtom;
+export const toggleTodoAtom = toggleTodoActionAtom;
+
 // Atom to sync between Jotai and Redux (for gradual migration)
 // TODO: Fix Jotai 2.x TypeScript compatibility
 export const syncWithReduxAtom = atom(

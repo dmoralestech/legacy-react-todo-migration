@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
-import { DualStateProvider } from '../../utils/providers';
+import { JotaiProvider } from '../../utils/providers';
 import TodoItem from '../TodoItem';
 import TodoForm from '../TodoForm';
 import TodoList from '../TodoList';
@@ -11,7 +11,7 @@ import * as featureFlags from '../../utils/featureFlags';
 // Mock the feature flag module
 vi.mock('../../utils/featureFlags');
 
-describe('Modern Components Integration with Redux', () => {
+describe('Modern Components Integration with Jotai', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Enable all modern components
@@ -24,14 +24,14 @@ describe('Modern Components Integration with Redux', () => {
           return true;
         case 'USE_JOTAI':
         case 'USE_TANSTACK_QUERY':
-          return false; // Keep using Redux for state
+          return true; // Use Jotai for state
         default:
           return false;
       }
     });
   });
 
-  test('modern TodoItem component works with Redux state', () => {
+  test('modern TodoItem component works with Jotai state', () => {
     const mockTodo = {
       id: '1',
       text: 'Test Todo',
@@ -46,9 +46,9 @@ describe('Modern Components Integration with Redux', () => {
     };
 
     render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoItem {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Verify modern component renders correctly
@@ -62,13 +62,13 @@ describe('Modern Components Integration with Redux', () => {
     expect(mockProps.onToggle).toHaveBeenCalledWith('1');
   });
 
-  test('modern TodoForm component works with Redux state', () => {
+  test('modern TodoForm component works with Jotai state', () => {
     const mockOnAdd = vi.fn();
 
     render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoForm onAdd={mockOnAdd} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Verify modern component renders correctly
@@ -85,7 +85,7 @@ describe('Modern Components Integration with Redux', () => {
     expect(mockOnAdd).toHaveBeenCalledWith({ text: 'New Todo' });
   });
 
-  test('modern TodoList component works with Redux state', () => {
+  test('modern TodoList component works with Jotai state', () => {
     const mockTodos = [
       { id: '1', text: 'First Todo', completed: false },
       { id: '2', text: 'Second Todo', completed: true }
@@ -99,9 +99,9 @@ describe('Modern Components Integration with Redux', () => {
     };
 
     render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoList {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Verify modern component renders correctly
@@ -109,7 +109,7 @@ describe('Modern Components Integration with Redux', () => {
     expect(screen.getByText('Second Todo')).toBeInTheDocument();
   });
 
-  test('modern TodoFilters component works with Redux state', () => {
+  test('modern TodoFilters component works with Jotai state', () => {
     const mockProps = {
       filter: 'all',
       onFilterChange: vi.fn(),
@@ -117,9 +117,9 @@ describe('Modern Components Integration with Redux', () => {
     };
 
     render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoFilters {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Verify modern component renders correctly
@@ -145,9 +145,9 @@ describe('Modern Components Integration with Redux', () => {
 
     // Render with modern components enabled
     const { container: modernContainer } = render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoItem {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Reset mocks and disable modern components
@@ -156,9 +156,9 @@ describe('Modern Components Integration with Redux', () => {
 
     // Render with legacy components
     const { container: legacyContainer } = render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoItem {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Both should have identical DOM structure
@@ -175,9 +175,9 @@ describe('Modern Components Integration with Redux', () => {
     };
 
     const { rerender } = render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoItem {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Should render modern component initially
@@ -186,9 +186,9 @@ describe('Modern Components Integration with Redux', () => {
     // Switch to legacy
     vi.mocked(featureFlags.useFeatureFlag).mockReturnValue(false);
     rerender(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoItem {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Should still render the same content
@@ -200,9 +200,9 @@ describe('Modern Components Integration with Redux', () => {
     });
     
     rerender(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoItem {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     // Should still render the same content
@@ -226,9 +226,9 @@ describe('Modern Components Integration with Redux', () => {
     };
 
     render(
-      <DualStateProvider>
+      <JotaiProvider>
         <TodoList {...mockProps} />
-      </DualStateProvider>
+      </JotaiProvider>
     );
 
     const endTime = performance.now();

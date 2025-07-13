@@ -1,38 +1,24 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
-import rootReducer from '../reducers';
-import rootSaga from '../sagas';
+import { JotaiProvider } from '../utils/providers';
 
 /**
- * Create a test store with optional initial state
- * @param {Object} initialState - Initial state for the store
- * @returns {Object} Redux store
+ * Create a test wrapper with Jotai provider
+ * @param {Object} initialState - Initial state (not used in Jotai, but kept for compatibility)
+ * @returns {Object} Test wrapper utilities
  */
 export const createTestStore = (initialState = {}) => {
-  const sagaMiddleware = createSagaMiddleware();
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(sagaMiddleware)
-  );
-  
-  // Start the saga middleware
-  const sagaTask = sagaMiddleware.run(rootSaga);
-  
-  // Add cleanup method
-  store.cleanup = () => {
-    sagaTask.cancel();
+  // Return a mock store interface for compatibility
+  return {
+    cleanup: () => {
+      // No cleanup needed for Jotai
+    }
   };
-  
-  return store;
 };
 
 /**
- * Custom render function that includes Redux Provider and Router
+ * Custom render function that includes Jotai Provider and Router
  * @param {ReactElement} ui - Component to render
  * @param {Object} options - Render options
  * @returns {Object} Render result with store
@@ -45,11 +31,11 @@ export const renderWithProviders = (ui, {
 } = {}) => {
   // Wrapper component with all providers
   const Wrapper = ({ children }) => (
-    <Provider store={store}>
+    <JotaiProvider>
       <BrowserRouter>
         {children}
       </BrowserRouter>
-    </Provider>
+    </JotaiProvider>
   );
 
   // Return the store along with render result
@@ -58,7 +44,7 @@ export const renderWithProviders = (ui, {
   return { 
     store, 
     ...result,
-    // Helper to cleanup saga tasks
+    // Helper to cleanup 
     cleanup: () => {
       if (store.cleanup) {
         store.cleanup();
