@@ -22,7 +22,7 @@
     "start:jotai": "REACT_APP_USE_JOTAI=true react-scripts start",
     "start:modern": "REACT_APP_USE_JOTAI=true REACT_APP_USE_TANSTACK_QUERY=true react-scripts start",
     "start:components": "REACT_APP_USE_MODERN_TODO_ITEM=true REACT_APP_USE_MODERN_TODO_FORM=true REACT_APP_USE_MODERN_TODO_LIST=true REACT_APP_USE_MODERN_TODO_FILTERS=true react-scripts start",
-    "build": "react-scripts build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
