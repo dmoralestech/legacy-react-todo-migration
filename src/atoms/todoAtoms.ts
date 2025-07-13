@@ -33,32 +33,33 @@ export const todoStatsAtom = atom((get) => {
 });
 
 // Server state atom using TanStack Query integration
-export const todosQueryAtom = atomWithQuery(() => ({
-  queryKey: ['todos'],
-  queryFn: async (): Promise<Todo[]> => {
-    // Mock API call - replace with real API
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          {
-            id: '1',
-            text: 'Learn Jotai atomic state management',
-            completed: false,
-            createdAt: new Date().toISOString(),
-          },
-          {
-            id: '2', 
-            text: 'Migrate from Redux to Jotai gradually',
-            completed: false,
-            createdAt: new Date().toISOString(),
-          }
-        ]);
-      }, 1000);
-    });
-  },
-  staleTime: 5 * 60 * 1000, // 5 minutes
-  refetchOnWindowFocus: false,
-}));
+// TODO: Re-enable atomWithQuery after basic Jotai integration is working
+// export const todosQueryAtom = atomWithQuery(() => ({
+//   queryKey: ['todos'],
+//   queryFn: async (): Promise<Todo[]> => {
+//     // Mock API call - replace with real API
+//     return new Promise((resolve) => {
+//       setTimeout(() => {
+//         resolve([
+//           {
+//             id: '1',
+//             text: 'Learn Jotai atomic state management',
+//             completed: false,
+//             createdAt: new Date().toISOString(),
+//           },
+//           {
+//             id: '2', 
+//             text: 'Migrate from Redux to Jotai gradually',
+//             completed: false,
+//             createdAt: new Date().toISOString(),
+//           }
+//         ]);
+//       }, 1000);
+//     });
+//   },
+//   staleTime: 5 * 60 * 1000, // 5 minutes
+//   refetchOnWindowFocus: false,
+// }));
 
 // Write-only atoms (actions) - replaces Redux actions
 export const addTodoActionAtom = atom(

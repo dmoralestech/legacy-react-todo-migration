@@ -8,7 +8,7 @@ const FEATURE_FLAG_CONFIG: FeatureFlags = {
     description: 'Enable modern React functional components'
   },
   USE_JOTAI: {
-    enabled: false,
+    enabled: false, // Controlled by environment variable for development
     rolloutPercentage: 0,
     description: 'Enable Jotai atomic state management'
   },
